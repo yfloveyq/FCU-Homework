@@ -15,7 +15,7 @@ void insertNode(TreeNodePtr *treePtr, int value);
 
 void inOrder(TreeNodePtr treePtr);
 
-treeNode *search(TreeNodePtr *treePtr, int n);
+TreeNode *search(TreeNodePtr treePtr, int n);
 
 // function main begins program execution
 int main(void) {
@@ -25,7 +25,7 @@ int main(void) {
 
     // insert random values between 0 and 14 in the tree
 
-    int item[8] = {12, 15, 8, 6, 12, 19, 2, 4};
+    int item[8] = {12, 15, 8, 6, 17, 19, 2, 4};
     for (int i = 0; i < 8; ++i) {
         insertNode(&rootPtr, item[i]);
         printf("%d ", item[i]);
@@ -38,12 +38,13 @@ int main(void) {
     int num;
     printf("\nEnter a number to search : ");
     scanf("%d", &num);
-    treeNode *find = search(&rootPtr, num);
+    TreeNodePtr find = search(rootPtr, num);
 
-    if (find == NULL) {
-        printf("Data not found.");
-    } else {
+    if (find != NULL) {
         printf("Data found : %d", find->data);
+    }
+    else {
+        printf("Data not found.");
     }
 }
 
@@ -86,22 +87,18 @@ void inOrder(TreeNodePtr treePtr) {
     }
 }
 
-treeNode *search(TreeNodePtr *treeNode, int n) {
-    if ((*treeNode)->data == n) {
-        printf("%d", (*treeNode)->data);
+TreeNode *search(TreeNodePtr treeNode, int n) {
+   if (treeNode != NULL){
 
-    } else if (&((*treeNode)->leftPtr) == NULL && &((*treeNode)->rightPtr) == NULL) {
-        printf("No data");
-    } else {
-        if (n < (*treeNode)->data) {
-            return search(&((*treeNode)->leftPtr), n);
-        }
-        if (n > (*treeNode)->data) {
-            return search(&((*treeNode)->rightPtr), n);
-        }
-
-    }
-
-
+       if(treeNode->data == n){
+           return treeNode;
+       }
+       else if(n > treeNode->data){
+           return search(treeNode->rightPtr, n);
+       } else if(n < treeNode->data){
+           return search(treeNode->leftPtr, n);
+       } else{
+           return NULL;
+       }
+   }
 }
-
