@@ -1,21 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct Node {
+struct Data {
     int data;
-    Node *next;
+    Data *next;
 };
 
-void input(Node *top, int num) {    //using push method
+void input(Data *top, int num) {    //using push method
 
-    Node *newPtr = (Node *) malloc(sizeof(Node));
+    Data *newPtr = (Data *) malloc(sizeof(Data));
     newPtr->next = NULL;
     newPtr->data = num;
     newPtr->next = top->next;
     top->next = newPtr;
 }
 
-Node *search(Node *top, int num) {
+Data *search(Data *top, int num) {
 
     if (top == NULL) {
         return NULL;
@@ -29,7 +29,7 @@ Node *search(Node *top, int num) {
 
 int main() {
 
-    Node *topPtr = (Node *) malloc(sizeof(Node));
+    Data *topPtr = (Data *) malloc(sizeof(Data));
     topPtr->next = NULL;
 
     input(topPtr, 1);
@@ -47,7 +47,7 @@ int main() {
     int n = 0;
     scanf("%d", &n);
 
-    Node *find = search(topPtr, n);
+    Data *find = search(topPtr, n);
 
     if (find == NULL) {
         printf("Data not found");

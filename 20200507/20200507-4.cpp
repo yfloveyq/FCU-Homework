@@ -1,16 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct data {
+struct Data {
     int value;
-    struct data *next;
+    struct Data *next;
 };
 
-void reverse(struct data **head) {
+void reverse(struct Data **head) {
 
-    struct data *pas = NULL;
-    struct data *now = *head;
-    struct data *next = NULL;
+    struct Data *pas = NULL;
+    struct Data *now = *head;
+    struct Data *next = NULL;
 
     while (now != NULL) {
         next = now->next;
@@ -21,16 +21,16 @@ void reverse(struct data **head) {
     *head = pas;
 }
 
-void push(struct data **head, char c) {
-    struct data *newnum = (struct data *) malloc(sizeof(struct data));
+void push(struct Data **head, char c) {
+    struct Data *newnum = (struct Data *) malloc(sizeof(struct Data));
     newnum->value = c;
     newnum->next = *head;
     *head = newnum;
 }
 
-void print(struct data *head) {
+void print(struct Data *head) {
 
-    struct data *t = head;
+    struct Data *t = head;
     while (t != NULL) {
         printf("%c ", t->value);
         t = t->next;
@@ -39,7 +39,7 @@ void print(struct data *head) {
 
 int main() {
 
-    struct data *head = NULL;
+    struct Data *head = NULL;
 
     push(&head, 'a');
     push(&head, 'q');

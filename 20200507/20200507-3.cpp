@@ -2,17 +2,17 @@
 #include <stdlib.h>
 #include <time.h>
 
-struct data {
+struct Data {
     int value;
-    data *next;
+    Data *next;
 };
 
-void input(data *n, int num) {
-    data *newdata = new data();     //create new memory size for data
+void input(Data *n, int num) {
+    Data *newdata = new Data();     //create new memory size for data
     newdata->value = num;           //put num into int value from struct data
     newdata->next = NULL;           //define the next element is NULL
-    data *now = n;
-    data *pas = NULL;
+    Data *now = n;
+    Data *pas = NULL;
     while (now != NULL && num > now->value) {
         pas = now;              //change numbers
         now = now->next;
@@ -25,9 +25,9 @@ void input(data *n, int num) {
     }
 }
 
-void printnum(data *n) {
+void printnum(Data *n) {
 
-    data *now = n;
+    Data *now = n;
     while (now != NULL) {
         printf("%d ", now->value);
         now = now->next;
@@ -35,7 +35,7 @@ void printnum(data *n) {
     puts("");
 }
 
-int counter(data *n) {
+int counter(Data *n) {
     int counter = 0;
     while (n != NULL) {
         counter++;
@@ -44,7 +44,7 @@ int counter(data *n) {
     return counter;
 }
 
-int sum(data *n) {
+int sum(Data *n) {
 
     int sum = 0;
 
@@ -56,13 +56,13 @@ int sum(data *n) {
 
 }
 
-float average(data *n) {
+float average(Data *n) {
     return (float) sum(n) / (float) counter(n);
 }
 
 int main() {
 
-    data *Ptr = new data();
+    Data *Ptr = new Data();
     srand(time(NULL));
     Ptr->value = 0;
     Ptr->next = NULL;
