@@ -4,10 +4,13 @@ int calc(int m, int n);
 
 int main(){
 	
-	int num1, num2;
-	
-	scanf("%d%d", &num1, &num2);
-	printf("\n%d", calc(num1,num2));
+	int num1, num2, amount;
+	scanf("%d", &amount);
+    for (int i = 0; i < amount; ++i) {
+        scanf("%d%d", &num1, &num2);
+        printf("%d\n", calc(num1,num2));
+    }
+
 	
 	
 	return 0;

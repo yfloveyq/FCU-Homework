@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 void hanoi(int level, char p1, char p2, char p3);
-
+int move=1;
 int main() {
 
     int level;
@@ -16,10 +16,12 @@ int main() {
 void hanoi(int level, char p1, char p2, char p3) {
 
     if (level == 1) {
-        printf("Plate %c go to Plate %c\n", p1, p3);
+        printf("%d:1 %c %c \n", move, p1, p3);
+        move++;
     } else {
         hanoi(level - 1, p1, p3, p2);
-        hanoi(1, p1, p2, p3);
+        printf("%d:%d %c %c \n", move, level, p1, p3);
+        move++;
         hanoi(level - 1, p2, p1, p3);
     }
 }

@@ -57,7 +57,7 @@ int sum(Data *n) {
 }
 
 float average(Data *n) {
-    return (float) sum(n) / (float) counter(n);
+    return (float) sum(n) / (float) move(n);
 }
 
 int main() {

@@ -4,11 +4,13 @@ int Fib(int n1);
 
 int main(){
 	
-	int n1;
-	
-	scanf("%d", &n1);
-	printf("%d", Fib(n1));
-	
+	int n1, amount;
+    scanf("%d", &amount);
+    for (int i = 0; i < amount; ++i) {
+        scanf("%d", &n1);
+        printf("%d\n", Fib(n1));
+    }
+
 	return 0;
 }
 
