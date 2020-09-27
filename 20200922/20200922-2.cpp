@@ -5,8 +5,8 @@ int chess(unsigned long long int num, unsigned long long int counter);
 
 int main() {
 
-    unsigned long long int num;
-    unsigned long long int counter = 0;
+    unsigned long long num;
+    unsigned long long counter = 0;
 
     scanf("%llu", &num);
     printf("%d", chess(num, counter));
