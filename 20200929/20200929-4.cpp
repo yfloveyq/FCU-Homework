@@ -2,34 +2,34 @@
 
 int main() {
 
-    int num1, num2, temp1, temp2, temp3, temp4, arr[1000] = {0};
+    int MaxExponent1, MaxExponent2, Element1, Power1, Element2, Power2, Arr[1000] = {0};
     char stop1, stop2;
 
-    scanf("%d", &num1);
+    scanf("%d", &MaxExponent1);
     while (1) {
 
-        scanf("%d%c[^\n]", &temp1, &stop1);
-        scanf("%d%c[^\n]", &temp2, &stop1);
-        arr[temp2] += temp1;
+        scanf("%d%c[^\n]", &Element1, &stop1);
+        scanf("%d%c[^\n]", &Power1, &stop1);
+        Arr[Power1] += Element1;
         if (stop1 == '#') {
             break;
         }
     }
 
-    scanf("%d", &num2);
+    scanf("%d", &MaxExponent2);
     while (1) {
 
-        scanf("%d%c[^\n]", &temp3, &stop2);
-        scanf("%d%c[^\n]", &temp4, &stop2);
-        arr[temp4] += temp3;
+        scanf("%d%c[^\n]", &Element2, &stop2);
+        scanf("%d%c[^\n]", &Power2, &stop2);
+        Arr[Power2] += Element2;
         if (stop2 == '#') {
             break;
         }
     }
 
     for (int i = 100; i >= 0; --i) {
-        if (arr[i] != 0) {
-            printf("%d*x^%d", arr[i], i);
+        if (Arr[i] != 0) {
+            printf("%d*x^%d", Arr[i], i);
             if (i != 0) {
                 printf(" + ");
             }
