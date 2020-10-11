@@ -92,7 +92,7 @@ void solveMaze(int mazeSize, bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeS
     while (currentX != mazeExitX || currentY != mazeExitY) {
         if (isDirectionWalkable(currentX, currentY, 'E', poppedStep, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'E');
-            poppedStep = '\0'; // the new step should mind the previous popped step
+            poppedStep = '\0'; // the new step should not mind the previous popped step
             currentX++;
         } else if (isDirectionWalkable(currentX, currentY, 'S', poppedStep, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'S');
