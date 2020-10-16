@@ -4,6 +4,7 @@
 #define MAX_MAZE_SIZE 20
 #define MAZE_ENTRY_X 0
 #define MAZE_ENTRY_Y 0
+#define MAX_POPPED_DIRECTION_SIZE 3
 
 typedef struct t_stack {
     int top;
@@ -55,8 +56,28 @@ void printStepSymbols(struct t_stack *stack) {
     }
 }
 
-bool isDirectionWalkable(int currentX, int currentY, char direction, char poppedStep,
-                         bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeStepStack *mazeStepStack) {
+void addPoppedDirections(int currentX, int currentY, char poppedDirection, char poppedDirections[MAX_MAZE_SIZE][MAX_MAZE_SIZE][MAX_POPPED_DIRECTION_SIZE]) {
+    for (int i = MAX_POPPED_DIRECTION_SIZE - 1; i > 0; --i) {
+        if (poppedDirections[currentX][currentY][i] == '\0') {
+            poppedDirections[currentX][currentY][i] = poppedDirection;
+            break;
+        }
+    }
+}
+
+int isDirectionAlreadyWalkedBefore(int currentX, int currentY, char direction, char poppedDirections[MAX_MAZE_SIZE][MAX_MAZE_SIZE][MAX_POPPED_DIRECTION_SIZE]) {
+    int isWaled = 0;
+    for (int i = 0; i < MAX_POPPED_DIRECTION_SIZE; ++i) {
+        if (direction == poppedDirections[currentX][currentY][i]) {
+            isWaled = 1;
+            break;
+        }
+    }
+    return isWaled;
+}
+
+int isDirectionWalkable(int mazeSize, int currentX, int currentY, char direction, char poppedDirections[MAX_MAZE_SIZE][MAX_MAZE_SIZE][MAX_POPPED_DIRECTION_SIZE],
+                         int mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeStepStack *mazeStepStack) {
     char reversedDirection;
     int xDelta = 0;
     int yDelta = 0;
@@ -78,37 +99,37 @@ bool isDirectionWalkable(int currentX, int currentY, char direction, char popped
             yDelta = -1;
             break;
     }
-    return mazeArray[currentY + yDelta][currentX + xDelta] // loop up the map if the direction is walkable
-           && poppedStep != direction // check if the direction already walked before and went back because no more ways to go
+    return (currentX + xDelta) >= 0
+           && (currentY + yDelta) >= 0
+           && (currentX + xDelta) <= mazeSize
+           && (currentY + yDelta) <= mazeSize
+           && mazeArray[currentY + yDelta][currentX + xDelta] // loop up the map if the direction is walkable. note: 1 = true, 0 = false by default in C language.
+           && !isDirectionAlreadyWalkedBefore(currentX, currentY, direction, poppedDirections) // check if the direction already walked before and went back because no more ways to go
            && peek(mazeStepStack) != reversedDirection; // prevent going back
 }
 
-void solveMaze(int mazeSize, bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeStepStack *mazeStepStack) {
+void solveMaze(int mazeSize, int mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeStepStack *mazeStepStack) {
     int mazeExitX = mazeSize - 1;
     int mazeExitY = mazeSize - 1;
     int currentX = MAZE_ENTRY_X;
     int currentY = MAZE_ENTRY_Y;
-    char poppedStep = '\0';
+    char poppedDirections[MAX_MAZE_SIZE][MAX_MAZE_SIZE][MAX_POPPED_DIRECTION_SIZE] = {'\0'};
     while (currentX != mazeExitX || currentY != mazeExitY) {
-        if (isDirectionWalkable(currentX, currentY, 'E', poppedStep, mazeArray, mazeStepStack)) {
+        if (isDirectionWalkable(mazeSize, currentX, currentY, 'E', poppedDirections, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'E');
-            poppedStep = '\0'; // the new step should not mind the previous popped step
             currentX++;
-        } else if (isDirectionWalkable(currentX, currentY, 'S', poppedStep, mazeArray, mazeStepStack)) {
+        } else if (isDirectionWalkable(mazeSize, currentX, currentY, 'S', poppedDirections, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'S');
-            poppedStep = '\0';
             currentY++;
-        } else if (isDirectionWalkable(currentX, currentY, 'W', poppedStep, mazeArray, mazeStepStack)) {
+        } else if (isDirectionWalkable(mazeSize, currentX, currentY, 'W', poppedDirections, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'W');
-            poppedStep = '\0';
             currentX--;
-        } else if (isDirectionWalkable(currentX, currentY, 'N', poppedStep, mazeArray, mazeStepStack)) {
+        } else if (isDirectionWalkable(mazeSize, currentX, currentY, 'N', poppedDirections, mazeArray, mazeStepStack)) {
             push(mazeStepStack, 'N');
-            poppedStep = '\0';
             currentY--;
         } else {
-            poppedStep = pop(mazeStepStack);
-            switch (poppedStep) {
+            char poppedDirection = pop(mazeStepStack);
+            switch (poppedDirection) {
                 case 'E':
                     currentX--;
                     break;
@@ -122,6 +143,7 @@ void solveMaze(int mazeSize, bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeS
                     currentY++;
                     break;
             }
+            addPoppedDirections(currentX, currentY, poppedDirection, poppedDirections);
         }
     }
 
@@ -131,14 +153,12 @@ void solveMaze(int mazeSize, bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE], MazeS
 int main() {
     // variable declaration and initialization
     int mazeSize = 0;
-    int intTempBooleanValue = 0; // there is no scanf conversion specifier for boolean, use integer to read 1 and 0.
-    bool mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE] = {false};
+    int mazeArray[MAX_MAZE_SIZE][MAX_MAZE_SIZE] = {false};
     // read inputs
     scanf("%d", &mazeSize);
     for (int i = 0; i < mazeSize; ++i) {
         for (int j = 0; j < mazeSize; ++j) {
-            scanf("%d", &intTempBooleanValue);
-            mazeArray[i][j] = intTempBooleanValue;
+            scanf("%d", &mazeArray[i][j]);
         }
     }
     // initialize stack to save steps
